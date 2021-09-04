@@ -7,42 +7,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 
-  <!-- CDN jsPDF Latest -->
+  <!-- CDN jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"></script>
-
 </head>
 
 <body>
-  <form action="/profile" method="post" enctype="multipart/form-data">
-    <input type="file" name="avatar" />
-    <button type="submit">Send</button>
-  </form>
+  <!-- Button to send AJAX -->
+  <button id="btn" onclick="javascript:send()">Send Doc via AJAX</button>
+  <script>
+    function send() {
+      var doc = new jsPDF();
+      doc.fromHTML('<h1>Hello World!</h1>', 20, 20);
 
-  <div id="html-template">
-    <h1>Demo</h1>
-  </div>
-</body>
+      var formData = new FormData();
+      var blob = new Blob([doc.output("blob")], { type: "application/pdf" });
+      formData.append("file", blob, "document.pdf");
 
-<hr>
-
-<!-- Button to send AJAX -->
-<button id="btn" onclick="javascript:send()">Send AJAX</button>
-<script>
-  function send() {
-    var doc = new jsPDF();
-
-    // doc.text(20, 20, 'Hello world!');
-    doc.fromHTML('<h1><i>Hello world!</i></h1>', 20, 20);
-
-    var formData = new FormData();
-    var blob = new Blob([doc.output("blob")], { type: "application/pdf" });
-    formData.append("avatar", blob);
-
-    var request = new XMLHttpRequest();
-    request.open("POST", "/profile");
-    request.send(formData);
-  }
-</script>
-
-
+      var request = new XMLHttpRequest();
+      request.open("POST", "/upload");
+      request.send(formData);
+    }
+  </script>
 </html>

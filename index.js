@@ -7,7 +7,7 @@ const jspdf = require('jspdf');
 var storage = multer.diskStorage({
   destination: 'uploads/',
   filename: function (req, file, callback) {
-    callback(null, file.originalname + ".pdf");
+    callback(null, file.originalname);
   }
 });
 const upload = multer({ storage: storage })
@@ -15,7 +15,7 @@ const port = 3000
 const doc = new jspdf.jsPDF();
 const app = express()
 
-app.post('/profile', upload.single('avatar'), function (req, res, next) {
+app.post('/upload', upload.single('file'), function (req, res, next) {
   res.send("File uploaded successfully")
 })
 
